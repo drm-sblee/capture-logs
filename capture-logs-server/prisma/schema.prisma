@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model browser {
+  browser_id               Int @id @default(autoincrement())
+  browser_name             String
+  logs log[]  @relation("BrowserLogs")
+}
+
+model log {
+  log_id                       Int  @id @default(autoincrement())
+  username                     String
+  mac_address                  String
+  os                           Int
+  browser                      Int
+  page_url                     String
+  detected_program             String
+  detected_time                DateTime
+  browserRef browser @relation("BrowserLogs", fields: [browser], references: [browser_id], onDelete: NoAction, onUpdate: NoAction, map: "log_browser_fk")
+  osRef                os      @relation("OsLogs", fields: [os], references: [os_id], onDelete: NoAction, onUpdate: NoAction, map: "log_os_fk")
+}
+
+model os {
+  os_id          Int @id @default(autoincrement())
+  os_name        String
+  logs log[]     @relation("OsLogs")
+}
