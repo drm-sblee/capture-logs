@@ -8,7 +8,7 @@ const OS_ICON_MAP = {
 const BROWSER_ICON_MAP = {
   "Google Chrome": "chrome",
   "Microsoft Edge": "edge",
-  "Firefox": "firefox",
+  "Mozila Firefox": "firefox",
   "Safari": "safari",
   "Opera":  "opera",
   "Naver Whale": "whale",
