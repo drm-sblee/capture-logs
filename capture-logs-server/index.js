@@ -94,13 +94,35 @@ const SSL_OPTIONS = {
   cert: fs.readFileSync("./cert/cert.pem"),
 };
 
-const credentials = { key: SSL_OPTIONS.key, cert: SSL_OPTIONS.cert };
-const PORT = 3000;
+// 1) HTTP 먼저 안전하게 시작
+const PORT = Number(process.env.PORT) || 3000;
+const httpServer = app
+  .listen(PORT, "0.0.0.0", () => console.log(`[HTTP] ${PORT} up`))
+  .on("error", (err) => console.error("[HTTP] listen error:", err));
+  
+const HTTPS_PORT = Number(process.env.HTTPS_PORT) || 3001;
+let httpsServer = null;
 
-https.createServer(credentials, app).listen(PORT, "0.0.0.0", () => {
-  console.log(`HTTP Redirect Server running on port ${PORT}`);
-});
+if (process.env.SSL_KEY_PATH && process.env.SSL_CERT_PATH) {
+  try {
+    const ssl = {
+      key: fs.readFileSync(process.env.SSL_KEY_PATH || SSL_OPTIONS.key),
+      cert: fs.readFileSync(process.env.SSL_CERT_PATH || SSL_OPTIONS.cert),
+    };
 
+    httpsServer = https
+      .createServer(ssl, app)
+      .listen(HTTPS_PORT, "0.0.0.0", () => console.log(`[HTTPS] ${HTTPS_PORT} up`))
+      .on("error", (err) => {
+        // 여기서 절대 process.exit() 하지 않음
+        console.error("[HTTPS] listen error:", err);
+      });
+  } catch (e) {
+    // 인증서 파일 읽기 실패 등도 여기서만 로그 남기고 넘어감
+    console.error("[HTTPS] init failed:", e);
+  }
+}
+  
 // 정상 종료 처리
 const shutdown = async (signal) => {
   console.log(`\nReceived ${signal}. Closing server...`);
