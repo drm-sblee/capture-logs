@@ -10,7 +10,7 @@ export default defineConfig({
     port: 5000,      // 포트 명시적 지정
     proxy: {
       '/api': {
-        target: 'http://capture-logs-server:3000',
+        target: 'https://capture-logs-server:3000',
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/api/, '')
       }
