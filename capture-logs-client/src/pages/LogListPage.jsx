@@ -210,13 +210,13 @@ function LogListPage() {
                       <td>{(currentPage - 1) * pageSize + index + 1}</td>
                       <td>{log.username}</td>
                       <td>{log.device_id}</td>
-                      <td>
-                        <div className="td-icon">
+                      <td class="td-icon">
+                        <div>
                           <TooltipIcon badge={<OSBadge name={log.os_name} />} tooltipText={log.os_name} />
                         </div>
                       </td>
-                      <td>
-                        <div className="td-icon">
+                      <td class="td-icon">
+                        <div>
                           <TooltipIcon badge={<BrowserBadge name={log.browser_name} />} tooltipText={log.browser_name} />
                         </div>
                       </td>

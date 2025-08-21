@@ -50,6 +50,16 @@ table th, table td {
   text-overflow: ellipsis;
 }
 
+table td.td-icon {
+  overflow: visible !important;
+}
+
+table td.td-icon div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 table {
   table-layout: fixed;
   min-width: 1200px;
@@ -456,12 +466,6 @@ img.img-main-logo {
 
 .button:disabled:hover {
   opacity: 1;
-}
-
-.td-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .tooltip-wrapper {
