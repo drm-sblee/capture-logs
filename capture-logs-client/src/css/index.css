@@ -469,7 +469,7 @@ img.img-main-logo {
 }
 
 .tooltip-wrapper {
-  position: relative;
+  position: absolute;
   display: flex;
 }
 
