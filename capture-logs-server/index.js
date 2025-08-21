@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import { PrismaClient } from "@prisma/client";
+import https from "https";
+import http from "http";
+import fs from "fs";
 
 const app = express();
 const db = new PrismaClient();
@@ -86,19 +89,46 @@ app.post("/logs/search", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on`);
+const SSL_OPTIONS = {
+  key: fs.readFileSync(process.env.SSL_KEY_PATH || './cert/key.pem'),
+  cert: fs.readFileSync(process.env.SSL_CERT_PATH || './cert/cert.pem'),
+};
+
+const PORT = process.env.PORT || 5000;
+const HTTP_PORT = process.env.HTTP_PORT || 80;
+
+// HTTPS 서버 생성
+const httpsServer = https.createServer(SSL_OPTIONS, app);
+
+// HTTP에서 HTTPS로 리다이렉트 서버
+const httpApp = express();
+httpApp.use((req, res) => {
+  const httpsUrl = `https://${req.headers.host}${req.url}`;
+  res.redirect(301, httpsUrl);
+});
+const httpServer = http.createServer(httpApp);
+
+// 서버 시작
+httpsServer.listen(PORT, "0.0.0.0", () => {
+  console.log(`HTTPS Server running on port ${PORT}`);
+});
+
+httpServer.listen(HTTP_PORT, "0.0.0.0", () => {
+  console.log(`HTTP Redirect Server running on port ${HTTP_PORT}`);
 });
 
 // 정상 종료 처리
 const shutdown = async (signal) => {
   console.log(`\nReceived ${signal}. Closing server...`);
-  server.close(async () => {
-    await db.$disconnect().catch(() => {});
-    console.log("Server closed. Bye!");
-    process.exit(0);
+
+  httpsServer.close(async () => {
+    httpServer.close(async () => {
+      await db.$disconnect().catch(() => {});
+      console.log("Servers closed. Bye!");
+      process.exit(0);
+    });
   });
 };
+
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
