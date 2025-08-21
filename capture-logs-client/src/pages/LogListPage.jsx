@@ -68,7 +68,6 @@ function LogListPage() {
     .then((data) => {
       setLogs([]);
       setTotalCount(0);
-      console.log(logs, totalCount);
       setLogs(data.data);
       setTotalCount(data.totalCount);
     })
@@ -171,19 +170,19 @@ function LogListPage() {
               <table>
                 <colgroup>
                   <col style={{ minWidth: "70px" }} width="5%"/>
-                  <col style={{ minWidth: "100px" }} width="10%"/>
-                  <col width="10%"/>
+                  <col style={{ minWidth: "100px" }} width="8%"/>
+                  <col style={{ minWidth: "320px" }} width="17%"/>
                   <col style={{ minWidth: "70px" }} width="5%"/>
                   <col style={{ minWidth: "70px" }} width="5%"/>
                   <col width="25%"/>
-                  <col width="30%"/>
+                  <col width="25%"/>
                   <col style={{ minWidth: "170px" }} width="10%"/>
                 </colgroup>
                 <thead>
                   <tr>
                     <th>No.</th>
                     <th>Username</th>
-                    <th>MAC Address</th>
+                    <th>Device ID</th>
                     <th>OS</th>
                     <th>Browser</th>
                     <th>Detected Program</th>
@@ -197,12 +196,12 @@ function LogListPage() {
               <table>
                 <colgroup>
                   <col style={{ minWidth: "70px" }} width="5%"/>
-                  <col style={{ minWidth: "100px" }} width="10%"/>
-                  <col width="10%"/>
+                  <col style={{ minWidth: "100px" }} width="8%"/>
+                  <col style={{ minWidth: "320px" }} width="17%"/>
                   <col style={{ minWidth: "70px" }} width="5%"/>
                   <col style={{ minWidth: "70px" }} width="5%"/>
                   <col width="25%"/>
-                  <col width="30%"/>
+                  <col width="25%"/>
                   <col style={{ minWidth: "170px" }} width="10%"/>
                 </colgroup>
                 <tbody>
@@ -210,7 +209,7 @@ function LogListPage() {
                     <tr key={index}>
                       <td>{(currentPage - 1) * pageSize + index + 1}</td>
                       <td>{log.username}</td>
-                      <td>{log.mac_address}</td>
+                      <td>{log.device_id}</td>
                       <td>
                         <div className="td-icon">
                           <TooltipIcon badge={<OSBadge name={log.os_name} />} tooltipText={log.os_name} />

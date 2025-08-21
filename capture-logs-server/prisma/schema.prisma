@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 model browser {
@@ -16,7 +16,7 @@ model browser {
 model log {
   log_id                       Int  @id @default(autoincrement())
   username                     String
-  mac_address                  String
+  device_id                    String
   os                           Int
   browser                      Int
   page_url                     String

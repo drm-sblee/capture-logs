@@ -6,10 +6,11 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: "0.0.0.0",
-    port: 3000,      // 포트 명시적 지정
+    allowedHosts: ["ex-demo.webxdrm.com", ".webxdrm.com"],
+    port: 5000,      // 포트 명시적 지정
     proxy: {
       '/api': {
-        target: 'http://capture-logs-server:5000',
+        target: 'http://capture-logs-server:3000',
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/api/, '')
       }
