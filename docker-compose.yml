@@ -9,6 +9,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     ports:
       - "3000:3000"
+      - "3001:3001"
     networks: [app-network]
 
   capture-logs-client:

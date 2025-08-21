@@ -93,30 +93,26 @@ const SSL_OPTIONS = {
   key: fs.readFileSync(process.env.SSL_KEY_PATH || "./cert/key.pem"),
   cert: fs.readFileSync(process.env.SSL_CERT_PATH || "./cert/cert.pem"),
 };
-
-const PORT = process.env.PORT || 5000;
-const HTTPS_PORT = process.env.HTTP_PORT || 5443;
+const credentials = { key: SSL_OPTIONS.key, cert: SSL_OPTIONS.cert };
+const PORT = 3000;
+const HTTPS_PORT = 3001;
 
 const httpServer = app.listen(PORT, "0.0.0.0", () => {
   console.log(`HTTP Redirect Server running on port ${PORT}`);
 });
 
-// HTTPS 서버 생성
-const httpsServer = https.createServer(SSL_OPTIONS, app);
-httpsServer.listen(HTTPS_PORT, "0.0.0.0", () => {
-  console.log(`HTTPS Server running on port ${HTTPS_PORT}`);
-});
+https.createServer(credentials, app).listen(HTTPS_PORT, "0.0.0.0", () => {
+  console.log(`HTTPS Server in ${HTTPS_PORT}`);
+})
 
 // 정상 종료 처리
 const shutdown = async (signal) => {
   console.log(`\nReceived ${signal}. Closing server...`);
 
   httpServer.close(async () => {
-    httpsServer.close(async () => {
-      await db.$disconnect().catch(() => {});
-      console.log("Servers closed. Bye!");
-      process.exit(0);
-    });
+    await db.$disconnect().catch(() => {});
+    console.log("Servers closed. Bye!");
+    process.exit(0);
   });
 };
 
