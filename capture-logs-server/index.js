@@ -90,39 +90,29 @@ app.post("/logs/search", async (req, res) => {
 });
 
 const SSL_OPTIONS = {
-  key: fs.readFileSync(process.env.SSL_KEY_PATH || './cert/key.pem'),
-  cert: fs.readFileSync(process.env.SSL_CERT_PATH || './cert/cert.pem'),
+  key: fs.readFileSync(process.env.SSL_KEY_PATH || "./cert/key.pem"),
+  cert: fs.readFileSync(process.env.SSL_CERT_PATH || "./cert/cert.pem"),
 };
 
 const PORT = process.env.PORT || 5000;
-const HTTP_PORT = process.env.HTTP_PORT || 80;
+const HTTPS_PORT = process.env.HTTP_PORT || 5443;
+
+const httpServer = app.listen(PORT, "0.0.0.0", () => {
+  console.log(`HTTP Redirect Server running on port ${PORT}`);
+});
 
 // HTTPS 서버 생성
 const httpsServer = https.createServer(SSL_OPTIONS, app);
-
-// HTTP에서 HTTPS로 리다이렉트 서버
-const httpApp = express();
-// httpApp.use((req, res) => {
-//   const httpsUrl = `https://${req.headers.host}${req.url}`;
-//   res.redirect(301, httpsUrl);
-// });
-const httpServer = http.createServer(httpApp);
-
-// 서버 시작
-// httpsServer.listen(PORT, "0.0.0.0", () => {
-//   console.log(`HTTPS Server running on port ${PORT}`);
-// });
-
-httpServer.listen(PORT, "0.0.0.0", () => {
-  console.log(`HTTP Redirect Server running on port ${PORT}`);
+httpsServer.listen(HTTPS_PORT, "0.0.0.0", () => {
+  console.log(`HTTPS Server running on port ${HTTPS_PORT}`);
 });
 
 // 정상 종료 처리
 const shutdown = async (signal) => {
   console.log(`\nReceived ${signal}. Closing server...`);
 
-  httpsServer.close(async () => {
-    httpServer.close(async () => {
+  httpServer.close(async () => {
+    httpsServer.close(async () => {
       await db.$disconnect().catch(() => {});
       console.log("Servers closed. Bye!");
       process.exit(0);
