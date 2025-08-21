@@ -90,20 +90,16 @@ app.post("/logs/search", async (req, res) => {
 });
 
 const SSL_OPTIONS = {
-  key: fs.readFileSync(process.env.SSL_KEY_PATH || "./cert/key.pem"),
-  cert: fs.readFileSync(process.env.SSL_CERT_PATH || "./cert/cert.pem"),
+  key: fs.readFileSync("./cert/key.pem"),
+  cert: fs.readFileSync("./cert/cert.pem"),
 };
+
 const credentials = { key: SSL_OPTIONS.key, cert: SSL_OPTIONS.cert };
 const PORT = 3000;
-const HTTPS_PORT = 3001;
 
-const httpServer = app.listen(PORT, "0.0.0.0", () => {
+https.createServer(credentials, app).listen(PORT, "0.0.0.0", () => {
   console.log(`HTTP Redirect Server running on port ${PORT}`);
 });
-
-https.createServer(credentials, app).listen(HTTPS_PORT, "0.0.0.0", () => {
-  console.log(`HTTPS Server in ${HTTPS_PORT}`);
-})
 
 // 정상 종료 처리
 const shutdown = async (signal) => {
