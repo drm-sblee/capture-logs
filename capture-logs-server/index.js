@@ -102,19 +102,19 @@ const httpsServer = https.createServer(SSL_OPTIONS, app);
 
 // HTTP에서 HTTPS로 리다이렉트 서버
 const httpApp = express();
-httpApp.use((req, res) => {
-  const httpsUrl = `https://${req.headers.host}${req.url}`;
-  res.redirect(301, httpsUrl);
-});
+// httpApp.use((req, res) => {
+//   const httpsUrl = `https://${req.headers.host}${req.url}`;
+//   res.redirect(301, httpsUrl);
+// });
 const httpServer = http.createServer(httpApp);
 
 // 서버 시작
-httpsServer.listen(PORT, "0.0.0.0", () => {
-  console.log(`HTTPS Server running on port ${PORT}`);
-});
+// httpsServer.listen(PORT, "0.0.0.0", () => {
+//   console.log(`HTTPS Server running on port ${PORT}`);
+// });
 
-httpServer.listen(HTTP_PORT, "0.0.0.0", () => {
-  console.log(`HTTP Redirect Server running on port ${HTTP_PORT}`);
+httpServer.listen(PORT, "0.0.0.0", () => {
+  console.log(`HTTP Redirect Server running on port ${PORT}`);
 });
 
 // 정상 종료 처리
