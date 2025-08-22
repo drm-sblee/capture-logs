@@ -9,10 +9,11 @@ const OS_ICON_MAP = {
 const BROWSER_ICON_MAP = {
   "Google Chrome": "chrome",
   "Microsoft Edge": "edge",
-  "Mozila Firefox": "firefox",
+  "Mozilla Firefox": "firefox",
   "Safari": "safari",
   "Opera":  "opera",
   "Naver Whale": "whale",
+  "Vivaldi": "vivaldi"
 };
 
 export function OSBadge({ name, className, title }) {

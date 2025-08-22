@@ -185,6 +185,12 @@ i.whale {
   height: 18px;
 }
 
+i.vivaldi {
+  background-image: url("/imgs/browser/vivaldi.svg");
+  width: 18px;
+  height: 18px;
+}
+
 img.img-main-logo {
   width: 158px;
   height: 28px;
