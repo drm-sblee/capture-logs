@@ -3,6 +3,7 @@ const wrap = { display: "inline-flex", alignItems: "center", gap: 6 };
 const OS_ICON_MAP = {
   "Windows": "windows",
   "macOS": "mac",
+  "Linux": "linux",
 };
 
 const BROWSER_ICON_MAP = {
